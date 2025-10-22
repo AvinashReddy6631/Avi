@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #chatbox {
+      width: 350px;
+      height: 400px;
+      border: 1px solid #ccc;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+    }
+
+    .msg {
+      margin: 8px 0;
+    }
+
+    .user {
+      text-align: right;
+      color: blue;
+    }
+
+    .bot {
+      text-align: left;
+      color: green;
+    }
+
+    #input-area {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    #user-input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    #send-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    #send-btn:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chatbot Assistant</h1>
+  <div id="chatbox">
+    <div id="messages"></div>
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="Type your message..." />
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const messages = document.getElementById("messages");
+    const userInput = document.getElementById("user-input");
+    const sendBtn = document.getElementById("send-btn");
+
+    // Simple rules (Later will be loaded from Excel / Cloud)
+    const rules = {
+      "hello": "Hi there! How can I help you today?",
+      "how are you": "I'm just code, but I'm doing great!",
+      "bye": "Goodbye! Have a nice day."
+    };
+
+    function appendMessage(sender, text) {
+      const msg = document.createElement("div");
+      msg.classList.add("msg", sender);
+      msg.textContent = text;
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function botReply(userText) {
+      const key = Object.keys(rules).find(k => userText.toLowerCase().includes(k));
+      const reply = key ? rules[key] : "Sorry, I don't understand that yet.";
+      appendMessage("bot", reply);
+    }
+
+    sendBtn.onclick = () => {
+      const text = userInput.value.trim();
+      if (text === "") return;
+      appendMessage("user", text);
+      userInput.value = "";
+      setTimeout(() => botReply(text), 500);
+    };
+  </script>
+</body>
+</html>
